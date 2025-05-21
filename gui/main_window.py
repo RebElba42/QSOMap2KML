@@ -8,6 +8,8 @@ from PyQt6.QtCore import Qt
 from gui.status_bar import StatusBar
 from gui.config_dialog import ConfigDialog
 from gui.map_preview import MapPreview
+from gui.auto_msgboxes import AutoCloseInfoBox
+from core.config_manager import ConfigManager
 from core.i18n import I18n
 from utils.adif_parser import parse_adif
 from utils.kml_export import export_qsos_to_kml
@@ -173,4 +175,10 @@ class MainWindow(QMainWindow):
                 self.qsos, file, my_locator, band_colors, mode_colors,
                 i18n=self.i18n, lang=lang
             )
-            QMessageBox.information(self, self.i18n.t("export_kml_title"), self.i18n.t("status_kml_exported"))
+
+            AutoCloseInfoBox(
+                self,
+                self.i18n.t("export_kml_title"),
+                self.i18n.t("status_kml_exported"),
+                os.path.join(os.path.dirname(__file__), "../resources/icons/Ok.png")
+            ).exec()
