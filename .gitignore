@@ -158,3 +158,5 @@ resources/icons/
 # Ignore OS files
 .DS_Store
 Thumbs.db
+build_mac.sh
+build_win.cmd

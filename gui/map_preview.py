@@ -113,7 +113,7 @@ class MapPreview(QWebEngineView):
             for band, color in band_colors.items():
                 band_legend += f'<i style="background:{color};width:12px;height:12px;display:inline-block;margin-right:4px"></i> {band}<br>'
 
-            # Legende für Modes
+            # Legend for Modes
             mode_legend = "<b>Modes:</b><br>"
             for mode, color in mode_colors.items():
                 mode_legend += f'<i style="background:{color};width:12px;height:12px;display:inline-block;margin-right:4px"></i> {mode}<br>'
@@ -121,12 +121,12 @@ class MapPreview(QWebEngineView):
             legend_html = f"""
             <div style="
                 position: fixed; 
-                bottom: 40px; left: 40px; width: 160px; z-index:9999; 
+                top: 10px; left: 10px; width: 180px; z-index:9999; 
                 background: white; border:2px solid grey; border-radius:6px; 
                 padding: 8px; font-size:12px; opacity: 0.9;">
                 {band_legend}<hr style="margin:4px 0;">{mode_legend}
             </div>
-            """          
+            """         
             m.get_root().html.add_child(Element(legend_html))  
             html = m.get_root().render()
             self.setHtml(html)
