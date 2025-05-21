@@ -2,7 +2,9 @@ from PyQt6.QtWebEngineWidgets import QWebEngineView
 import folium
 import logging
 from folium.plugins import BeautifyIcon
+from folium import Element
 from utils.grid_locator import locator_to_latlon
+from utils.kml_export import format_adif_date, format_adif_time
 from core.config_manager import ConfigManager
 
 class MapPreview(QWebEngineView):
@@ -55,16 +57,23 @@ class MapPreview(QWebEngineView):
                 grid = qso.get('gridsquare')
                 call = qso.get('call', 'Unknown').upper()
                 band = qso.get('band', '')
-                mode = qso.get('mode', '').upper()  # <-- hier!
+                mode = qso.get('mode', '').upper()
                 name = qso.get('name', '')
+                date_raw = qso.get('date', '') or qso.get('qso_date', '')
+                time_raw = qso.get('time', '') or qso.get('time_on', '')
+                lang = self.i18n.lang if hasattr(self.i18n, "lang") else "en"
+                date = format_adif_date(date_raw, lang)
+                time = format_adif_time(time_raw)
                 pos = locator_to_latlon(grid) if grid else None
 
                 tooltip = self.i18n.t("qso_tooltip").format(
                     call=call,
                     band=band,
                     mode=mode,
-                    name=name
-                ) if self.i18n else f"Call: {call}\nBand: {band}\nMode: {mode}\nName: {name}"
+                    name=name,
+                    date=date,
+                    time=time
+                ) if self.i18n else f"Call: {call}\nBand: {band}\nMode: {mode}\nName: {name}\nDate: {date}\nTime: {time}"
 
                 if pos:
                     line_color = band_colors.get(band, "#3388ff")
@@ -99,6 +108,26 @@ class MapPreview(QWebEngineView):
                 logging.info("No QSOs with valid locator to display on map.")
             else:
                 logging.info(f"Displayed {marker_count} QSOs on map.")
+
+            band_legend = "<b>Bands:</b><br>"
+            for band, color in band_colors.items():
+                band_legend += f'<i style="background:{color};width:12px;height:12px;display:inline-block;margin-right:4px"></i> {band}<br>'
+
+            # Legende für Modes
+            mode_legend = "<b>Modes:</b><br>"
+            for mode, color in mode_colors.items():
+                mode_legend += f'<i style="background:{color};width:12px;height:12px;display:inline-block;margin-right:4px"></i> {mode}<br>'
+
+            legend_html = f"""
+            <div style="
+                position: fixed; 
+                bottom: 40px; left: 40px; width: 160px; z-index:9999; 
+                background: white; border:2px solid grey; border-radius:6px; 
+                padding: 8px; font-size:12px; opacity: 0.9;">
+                {band_legend}<hr style="margin:4px 0;">{mode_legend}
+            </div>
+            """          
+            m.get_root().html.add_child(Element(legend_html))  
             html = m.get_root().render()
             self.setHtml(html)
         except Exception as e:

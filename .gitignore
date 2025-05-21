@@ -150,6 +150,7 @@ share/xyzservices/providers.json
 pyvenv.cfg
 qso_examp*.adi*
 Export.kml
+QSO-Export.kml
 
 # Resources (generated or user-specific)
 resources/icons/

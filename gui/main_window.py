@@ -159,7 +159,7 @@ class MainWindow(QMainWindow):
         file, _ = QFileDialog.getSaveFileName(
             self,
             self.i18n.t("dialog_export_kml_title"),
-            "",
+            "QSO-Export",
             "KML (*.kml)"
         )
         if file:
@@ -168,5 +168,9 @@ class MainWindow(QMainWindow):
             my_locator = config.get("my_grid")
             band_colors = config.get("bands_colors", {})
             mode_colors = config.get("modes_colors", {})
-            export_qsos_to_kml(self.qsos, file, my_locator, band_colors, mode_colors)
+            lang = self.i18n.lang if hasattr(self.i18n, "lang") else "en"
+            export_qsos_to_kml(
+                self.qsos, file, my_locator, band_colors, mode_colors,
+                i18n=self.i18n, lang=lang
+            )
             QMessageBox.information(self, self.i18n.t("export_kml_title"), self.i18n.t("status_kml_exported"))

@@ -39,5 +39,6 @@
   "config_band_color_for": "Farbe für Band {band}",
   "config_mode_color_for": "Farbe für Mode {mode}",
   "pick_color_for": "Farbe wählen für {item}",
-  "qso_tooltip": "Call: {call}\nBand: {band}\nMode: {mode}\nName: {name}"
+  "qso_tooltip": "Call: {call}\nBand: {band}\nMode: {mode}\nName: {name}\nDatum: {date}\nZeit: {time}",
+  "qth_tooltip": "Dein Standort"
 }

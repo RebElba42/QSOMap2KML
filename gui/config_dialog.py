@@ -6,7 +6,7 @@ from core.config_manager import ConfigManager
 from utils.logger import set_log_level
 
 # Beispiel-Bänder und Modes (kannst du anpassen)
-BANDS = ["160m", "80m", "40m", "20m", "15m", "10m"]
+BANDS = ["160m", "80m", "60m", "40m", "20m", "17m", "15m", "10m"]
 MODES = ["SSB", "CW", "FT8", "FM", "AM"]
 
 class ConfigDialog(QDialog):
