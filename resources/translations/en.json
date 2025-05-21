@@ -22,5 +22,16 @@
   "tooltip_about": "Show information about QSOMapGE",
   "status_loading_adif": "Loading ADIF file...",
   "status_loaded_adif": "{count} QSOs loaded.",
-  "status_error_adif": "Error loading ADIF file."
+  "status_error_adif": "Error loading ADIF file.",
+  "config_language": "Language",
+  "config_dark_mode": "Enable dark mode",
+  "config_own_locator": "Your grid locator (e.g. JO31ER)",
+  "config_own_name": "Your Callsign",
+  "config_log_level": "Log level",
+  "config_bands_colors": "Band colors (dict)",
+  "config_modes_colors": "Mode colors (dict)",
+  "save": "Save",
+  "config_band_color_for": "Color for band {band}",
+  "config_mode_color_for": "Color for mode {mode}",
+  "pick_color_for": "Pick color for {item}"
 }

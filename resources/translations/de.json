@@ -22,5 +22,16 @@
   "tooltip_about": "Informationen zu QSOMapGE anzeigen",
   "status_loading_adif": "Lade ADIF-Datei...",
   "status_loaded_adif": "{count} QSOs geladen.",
-  "status_error_adif": "Fehler beim Laden der ADIF-Datei."
+  "status_error_adif": "Fehler beim Laden der ADIF-Datei.",
+  "config_language": "Sprache",
+  "config_dark_mode": "Dark Mode aktivieren",
+  "config_own_locator": "Eigener Locator (z.B. JO31ER)",
+  "config_own_name": "Dein Rufzeichen",
+  "config_log_level": "Log-Level",
+  "config_bands_colors": "Bandfarben (dict)",
+  "config_modes_colors": "Modefarben (dict)",
+  "save": "Speichern",
+  "config_band_color_for": "Farbe für Band {band}",
+  "config_mode_color_for": "Farbe für Mode {mode}",
+  "pick_color_for": "Farbe wählen für {item}"
 }

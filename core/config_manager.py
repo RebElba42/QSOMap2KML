@@ -13,5 +13,6 @@ class ConfigManager:
 
     @staticmethod
     def save(config):
+        os.makedirs(os.path.dirname(ConfigManager.CONFIG_PATH), exist_ok=True)
         with open(ConfigManager.CONFIG_PATH, "w", encoding="utf-8") as f:
             json.dump(config, f, indent=2)

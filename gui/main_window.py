@@ -1,4 +1,5 @@
 import os
+import logging
 from PyQt6.QtWidgets import (
     QMainWindow, QFileDialog, QMessageBox, QToolBar
 )
@@ -95,8 +96,10 @@ class MainWindow(QMainWindow):
                 self.qsos = qsos
                 self.status_bar.showMessage(self.i18n.t("status_loaded_adif").format(count=len(qsos)))
                 self.map_preview.show_qsos(qsos)
+                logging.info(f"Loaded ADIF file: {file} ({len(qsos)} QSOs)")
             except Exception as e:
                 self.status_bar.showMessage(self.i18n.t("status_error_adif"))
+                logging.error(f"Error loading ADIF file: {file} - {e}")
                 QMessageBox.critical(self, "Error", str(e))
 
     def open_config(self):

@@ -1,9 +1,22 @@
 {
   "language": "en",
   "dark_mode": true,
-  "bands_colors": {},
-  "modes_colors": {},
-  "my_grid": "",
-  "my_name": "",
+  "bands_colors": {
+    "160m": "#d64d35",
+    "80m": "#d68c18",
+    "40m": "#aad63d",
+    "20m": "#4ad665",
+    "15m": "#4cd6cf",
+    "10m": "#5850d6"
+  },
+  "modes_colors": {
+    "SSB": "#bed6a6",
+    "CW": "#b5d6cc",
+    "FT8": "#aa91d6",
+    "FM": "#bb5bd6",
+    "AM": "#a21ad6"
+  },
+  "my_grid": "JO31ER",
+  "my_name": "DB4REB",
   "log_level": "INFO"
 }
