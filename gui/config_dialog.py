@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import (
-    QDialog, QVBoxLayout, QLabel, QPushButton, QLineEdit, QComboBox, QHBoxLayout, QColorDialog, QCheckBox, QFormLayout
+    QDialog, QVBoxLayout, QLabel, QPushButton, QLineEdit, QComboBox, QHBoxLayout, QColorDialog, QCheckBox, QFormLayout, QGroupBox
 )
 from PyQt6.QtGui import QColor
 from core.config_manager import ConfigManager
@@ -10,10 +10,7 @@ BANDS = ["160m", "80m", "60m", "40m", "20m", "17m", "15m", "10m"]
 MODES = ["SSB", "CW", "FT8", "FM", "AM"]
 
 class ConfigDialog(QDialog):
-    """
-    Configuration dialog for QSOMap2KML.
-    Supports i18n and editing all config fields, including color pickers.
-    """
+    # ...existing code...
     def __init__(self, parent=None, i18n=None):
         super().__init__(parent)
         self.i18n = i18n
@@ -22,36 +19,33 @@ class ConfigDialog(QDialog):
         self.config = ConfigManager.load()
 
         layout = QVBoxLayout()
-        form = QFormLayout()
 
-        # Language
+        # --- Common Group ---
+        common_group = QGroupBox(self.i18n.t("config_group_common") if self.i18n else "Common")
+        common_form = QFormLayout()
+        self.darkmode_checkbox = QCheckBox(self.i18n.t("config_dark_mode"))
+        self.darkmode_checkbox.setChecked(self.config.get("dark_mode", True))
+        common_form.addRow(self.darkmode_checkbox)
+        self.locator_edit = QLineEdit(self.config.get("my_grid", ""))
+        common_form.addRow(QLabel(self.i18n.t("config_own_locator")), self.locator_edit)
+        self.name_edit = QLineEdit(self.config.get("my_name", ""))
+        common_form.addRow(QLabel(self.i18n.t("config_own_name")), self.name_edit)
+        self.loglevel_combo = QComboBox()
+        self.loglevel_combo.addItems(["INFO", "DEBUG"])
+        self.loglevel_combo.setCurrentText(self.config.get("log_level", "INFO"))
+        common_form.addRow(QLabel(self.i18n.t("config_log_level")), self.loglevel_combo)
         self.lang_combo = QComboBox()
         self.lang_combo.addItem("English", "en")
         self.lang_combo.addItem("Deutsch", "de")
         idx = 0 if self.config.get("language", "en") == "en" else 1
         self.lang_combo.setCurrentIndex(idx)
-        form.addRow(QLabel(self.i18n.t("config_language")), self.lang_combo)
+        common_form.addRow(QLabel(self.i18n.t("config_language")), self.lang_combo)
+        common_group.setLayout(common_form)
+        layout.addWidget(common_group)
 
-        # Dark Mode
-        self.darkmode_checkbox = QCheckBox(self.i18n.t("config_dark_mode"))
-        self.darkmode_checkbox.setChecked(self.config.get("dark_mode", True))
-        form.addRow(self.darkmode_checkbox)
-
-        # Own Locator
-        self.locator_edit = QLineEdit(self.config.get("my_grid", ""))
-        form.addRow(QLabel(self.i18n.t("config_own_locator")), self.locator_edit)
-
-        # Own Name
-        self.name_edit = QLineEdit(self.config.get("my_name", ""))
-        form.addRow(QLabel(self.i18n.t("config_own_name")), self.name_edit)
-
-        # Log Level
-        self.loglevel_combo = QComboBox()
-        self.loglevel_combo.addItems(["INFO", "DEBUG"])
-        self.loglevel_combo.setCurrentText(self.config.get("log_level", "INFO"))
-        form.addRow(QLabel(self.i18n.t("config_log_level")), self.loglevel_combo)
-
-        # Band Colors
+        # --- Band Colors Group ---
+        band_group = QGroupBox(self.i18n.t("config_group_band_colors") if self.i18n else "Band Colors")
+        band_form = QFormLayout()
         self.band_color_buttons = {}
         band_colors = self.config.get("bands_colors", {})
         for band in BANDS:
@@ -60,12 +54,13 @@ class ConfigDialog(QDialog):
             btn.setStyleSheet(f"background-color: {color}")
             btn.clicked.connect(lambda _, b=band: self.pick_band_color(b))
             self.band_color_buttons[band] = btn
-            row = QHBoxLayout()
-            row.addWidget(QLabel(band))
-            row.addWidget(btn)
-            form.addRow(QLabel(self.i18n.t("config_band_color_for").format(band=band)), btn)
+            band_form.addRow(QLabel(band), btn)
+        band_group.setLayout(band_form)
+        layout.addWidget(band_group)
 
-        # Mode Colors
+        # --- Mode Colors Group ---
+        mode_group = QGroupBox(self.i18n.t("config_group_mode_colors") if self.i18n else "Mode Colors")
+        mode_form = QFormLayout()
         self.mode_color_buttons = {}
         mode_colors = self.config.get("modes_colors", {})
         for mode in MODES:
@@ -74,11 +69,11 @@ class ConfigDialog(QDialog):
             btn.setStyleSheet(f"background-color: {color}")
             btn.clicked.connect(lambda _, m=mode: self.pick_mode_color(m))
             self.mode_color_buttons[mode] = btn
-            form.addRow(QLabel(self.i18n.t("config_mode_color_for").format(mode=mode)), btn)
+            mode_form.addRow(QLabel(mode), btn)
+        mode_group.setLayout(mode_form)
+        layout.addWidget(mode_group)
 
-        layout.addLayout(form)
-
-        # Buttons
+        # --- Buttons ---
         btn_layout = QHBoxLayout()
         save_btn = QPushButton(self.i18n.t("save"))
         save_btn.clicked.connect(self.save_config)
