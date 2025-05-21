@@ -10,6 +10,7 @@ from gui.config_dialog import ConfigDialog
 from gui.map_preview import MapPreview
 from core.i18n import I18n
 from utils.adif_parser import parse_adif
+from utils.kml_export import export_qsos_to_kml
 
 class MainWindow(QMainWindow):
     """
@@ -40,16 +41,24 @@ class MainWindow(QMainWindow):
         self.open_action_menu.setToolTip(self.i18n.t("tooltip_open_adif"))
         self.open_action_menu.triggered.connect(self.open_adif)
 
+        self.export_kml_action_menu = QAction(self._icon("Export.png"), self.i18n.t("menu_export_kml"), self)
+        self.export_kml_action_menu.setToolTip(self.i18n.t("tooltip_export_kml"))
+        self.export_kml_action_menu.triggered.connect(self.export_kml)
+        self.export_kml_action_menu.setEnabled(bool(self.qsos))
+
         self.exit_action_menu = QAction(self._icon("Close.png"), self.i18n.t("menu_exit"), self)
         self.exit_action_menu.setToolTip(self.i18n.t("tooltip_exit"))
         self.exit_action_menu.triggered.connect(self.close)
-        print("exit_action_menu text:", repr(self.exit_action_menu.text()))
-        print("exit_action_menu ords:", [ord(c) for c in self.exit_action_menu.text()])
 
         # File actions (Toolbar)
         self.open_action_toolbar = QAction(self._icon("Upload image.png"), self.i18n.t("menu_open_adif"), self)
         self.open_action_toolbar.setToolTip(self.i18n.t("tooltip_open_adif"))
         self.open_action_toolbar.triggered.connect(self.open_adif)
+
+        self.export_kml_action_toolbar = QAction(self._icon("Export.png"), self.i18n.t("menu_export_kml"), self)
+        self.export_kml_action_toolbar.setToolTip(self.i18n.t("tooltip_export_kml"))
+        self.export_kml_action_toolbar.triggered.connect(self.export_kml)
+        self.export_kml_action_toolbar.setEnabled(bool(self.qsos))
 
         self.exit_action_toolbar = QAction(self._icon("Close.png"), self.i18n.t("menu_exit"), self)
         self.exit_action_toolbar.setToolTip(self.i18n.t("tooltip_exit"))
@@ -75,14 +84,13 @@ class MainWindow(QMainWindow):
 
     def _create_menu(self):
         menubar = self.menuBar()
-        menubar.clear()    
+        menubar.clear()
         # File menu
         file_menu = menubar.addMenu(self.i18n.t("menu_file"))
         file_menu.addAction(self.open_action_menu)
-        file_menu.addSeparator()     
+        file_menu.addAction(self.export_kml_action_menu)
+        file_menu.addSeparator()
         file_menu.addAction(self.exit_action_menu)
-        dummy_action = QAction("DUMMY", self)
-        file_menu.addAction(dummy_action)        
         # Settings menu
         settings_menu = menubar.addMenu(self.i18n.t("menu_settings"))
         settings_menu.addAction(self.config_action_menu)
@@ -97,6 +105,7 @@ class MainWindow(QMainWindow):
         toolbar.setMovable(False)
         self.addToolBar(Qt.ToolBarArea.TopToolBarArea, toolbar)
         toolbar.addAction(self.open_action_toolbar)
+        toolbar.addAction(self.export_kml_action_toolbar)
         toolbar.addAction(self.config_action_toolbar)
         toolbar.addAction(self.about_action_toolbar)
         toolbar.addSeparator()
@@ -117,6 +126,9 @@ class MainWindow(QMainWindow):
                 self.status_bar.showMessage(self.i18n.t("status_loaded_adif").format(count=len(qsos)))
                 self.map_preview.show_qsos(qsos)
                 logging.info(f"Loaded ADIF file: {file} ({len(qsos)} QSOs)")
+                # Enable export actions
+                self.export_kml_action_menu.setEnabled(True)
+                self.export_kml_action_toolbar.setEnabled(True)
             except Exception as e:
                 self.status_bar.showMessage(self.i18n.t("status_error_adif"))
                 logging.error(f"Error loading ADIF file: {file} - {e}")
@@ -142,3 +154,19 @@ class MainWindow(QMainWindow):
         self._create_toolbar()
         self.map_preview.i18n = self.i18n
         self.status_bar.showMessage(self.i18n.t("ready"))
+
+    def export_kml(self):
+        file, _ = QFileDialog.getSaveFileName(
+            self,
+            self.i18n.t("dialog_export_kml_title"),
+            "",
+            "KML (*.kml)"
+        )
+        if file:
+            from core.config_manager import ConfigManager
+            config = ConfigManager.load()
+            my_locator = config.get("my_grid")
+            band_colors = config.get("bands_colors", {})
+            mode_colors = config.get("modes_colors", {})
+            export_qsos_to_kml(self.qsos, file, my_locator, band_colors, mode_colors)
+            QMessageBox.information(self, self.i18n.t("export_kml_title"), self.i18n.t("status_kml_exported"))
