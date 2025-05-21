@@ -76,7 +76,7 @@ class MapPreview(QWebEngineView):
                             weight=2,
                             opacity=0.7
                         ).add_to(m)
-                    logging.info(f"QSO {call}: mode={mode}, marker_color={marker_color}, band={band}, line_color={line_color}")
+                    logging.debug(f"QSO {call}: mode={mode}, marker_color={marker_color}, band={band}, line_color={line_color}")
                     folium.Marker(
                         location=pos,
                         popup=call,

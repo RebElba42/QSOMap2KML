@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QColor
 from core.config_manager import ConfigManager
+from utils.logger import set_log_level
 
 # Beispiel-Bänder und Modes (kannst du anpassen)
 BANDS = ["160m", "80m", "40m", "20m", "15m", "10m"]
@@ -101,6 +102,8 @@ class ConfigDialog(QDialog):
         if color.isValid():
             self.mode_color_buttons[mode].setStyleSheet(f"background-color: {color.name()}")
 
+
+
     def save_config(self):
         self.config["language"] = self.lang_combo.currentData()
         self.config["dark_mode"] = self.darkmode_checkbox.isChecked()
@@ -111,4 +114,9 @@ class ConfigDialog(QDialog):
         self.config["bands_colors"] = {band: self.band_color_buttons[band].palette().button().color().name() for band in self.band_color_buttons}
         self.config["modes_colors"] = {mode: self.mode_color_buttons[mode].palette().button().color().name() for mode in self.mode_color_buttons}
         ConfigManager.save(self.config)
+        set_log_level(self.config["log_level"])
+        if self.parent() and hasattr(self.parent(), "reload_language"):
+            self.parent().reload_language(self.config["language"]) 
+        if hasattr(self.parent(), "qsos") and hasattr(self.parent(), "map_preview"):
+            self.parent().map_preview.show_qsos(self.parent().qsos)
         self.accept()

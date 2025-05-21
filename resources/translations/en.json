@@ -1,11 +1,11 @@
 {
-  "welcome": "Welcome to QSOMapGE!",
+  "welcome": "Welcome to QSOMapGE",
   "ready": "Ready",
   "menu_file": "File",
   "menu_open_adif": "Open ADIF...",
   "menu_exit": "Exit",
   "menu_settings": "Settings",
-  "menu_configuration": "Configuration...",
+  "menu_configuration": "Configuration",
   "menu_help": "Help",
   "menu_about": "About",
   "dialog_open_adif_title": "Open ADIF File",

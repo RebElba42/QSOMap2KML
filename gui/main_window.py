@@ -31,56 +31,76 @@ class MainWindow(QMainWindow):
         self._create_toolbar()
 
     def _icon(self, filename):
-        # Helper to get the absolute path for icons
         base_dir = os.path.dirname(os.path.abspath(__file__))
         return QIcon(os.path.join(base_dir, "../resources/icons", filename))
 
     def _create_actions(self):
-        # File actions
-        self.open_action = QAction(self._icon("Upload image.png"), self.i18n.t("menu_open_adif"), self)
-        self.open_action.setToolTip(self.i18n.t("tooltip_open_adif"))
-        self.open_action.triggered.connect(self.open_adif)
+        # File actions (Menu)
+        self.open_action_menu = QAction(self._icon("Upload image.png"), self.i18n.t("menu_open_adif"), self)
+        self.open_action_menu.setToolTip(self.i18n.t("tooltip_open_adif"))
+        self.open_action_menu.triggered.connect(self.open_adif)
 
-        self.exit_action = QAction(self._icon("Close.png"), self.i18n.t("menu_exit"), self)
-        self.exit_action.setToolTip(self.i18n.t("tooltip_exit"))
-        self.exit_action.triggered.connect(self.close)
+        self.exit_action_menu = QAction(self._icon("Close.png"), self.i18n.t("menu_exit"), self)
+        self.exit_action_menu.setToolTip(self.i18n.t("tooltip_exit"))
+        self.exit_action_menu.triggered.connect(self.close)
+        print("exit_action_menu text:", repr(self.exit_action_menu.text()))
+        print("exit_action_menu ords:", [ord(c) for c in self.exit_action_menu.text()])
+
+        # File actions (Toolbar)
+        self.open_action_toolbar = QAction(self._icon("Upload image.png"), self.i18n.t("menu_open_adif"), self)
+        self.open_action_toolbar.setToolTip(self.i18n.t("tooltip_open_adif"))
+        self.open_action_toolbar.triggered.connect(self.open_adif)
+
+        self.exit_action_toolbar = QAction(self._icon("Close.png"), self.i18n.t("menu_exit"), self)
+        self.exit_action_toolbar.setToolTip(self.i18n.t("tooltip_exit"))
+        self.exit_action_toolbar.triggered.connect(self.close)
 
         # Settings actions
-        self.config_action = QAction(self._icon("Settings.png"), self.i18n.t("menu_configuration"), self)
-        self.config_action.setToolTip(self.i18n.t("tooltip_configuration"))
-        self.config_action.triggered.connect(self.open_config)
+        self.config_action_menu = QAction(self._icon("Settings.png"), self.i18n.t("menu_configuration"), self)
+        self.config_action_menu.setToolTip(self.i18n.t("tooltip_configuration"))
+        self.config_action_menu.triggered.connect(self.open_config)
+
+        self.config_action_toolbar = QAction(self._icon("Settings.png"), self.i18n.t("menu_configuration"), self)
+        self.config_action_toolbar.setToolTip(self.i18n.t("tooltip_configuration"))
+        self.config_action_toolbar.triggered.connect(self.open_config)
 
         # Help actions
-        self.about_action = QAction(self._icon("Info.png"), self.i18n.t("menu_about"), self)
-        self.about_action.setToolTip(self.i18n.t("tooltip_about"))
-        self.about_action.triggered.connect(self.show_about)
+        self.about_action_menu = QAction(self._icon("Info.png"), self.i18n.t("menu_about"), self)
+        self.about_action_menu.setToolTip(self.i18n.t("tooltip_about"))
+        self.about_action_menu.triggered.connect(self.show_about)
+
+        self.about_action_toolbar = QAction(self._icon("Info.png"), self.i18n.t("menu_about"), self)
+        self.about_action_toolbar.setToolTip(self.i18n.t("tooltip_about"))
+        self.about_action_toolbar.triggered.connect(self.show_about)
 
     def _create_menu(self):
         menubar = self.menuBar()
-
+        menubar.clear()    
         # File menu
         file_menu = menubar.addMenu(self.i18n.t("menu_file"))
-        file_menu.addAction(self.open_action)
-        file_menu.addSeparator()
-        file_menu.addAction(self.exit_action)
-
+        file_menu.addAction(self.open_action_menu)
+        file_menu.addSeparator()     
+        file_menu.addAction(self.exit_action_menu)
+        dummy_action = QAction("DUMMY", self)
+        file_menu.addAction(dummy_action)        
         # Settings menu
         settings_menu = menubar.addMenu(self.i18n.t("menu_settings"))
-        settings_menu.addAction(self.config_action)
-
+        settings_menu.addAction(self.config_action_menu)
         # Help menu
         help_menu = menubar.addMenu(self.i18n.t("menu_help"))
-        help_menu.addAction(self.about_action)
+        help_menu.addAction(self.about_action_menu)
 
     def _create_toolbar(self):
+        for tb in self.findChildren(QToolBar):
+            self.removeToolBar(tb)
         toolbar = QToolBar(self.i18n.t("toolbar_main"))
         toolbar.setMovable(False)
         self.addToolBar(Qt.ToolBarArea.TopToolBarArea, toolbar)
-        toolbar.addAction(self.open_action)
-        toolbar.addAction(self.config_action)
-        toolbar.addAction(self.about_action)
+        toolbar.addAction(self.open_action_toolbar)
+        toolbar.addAction(self.config_action_toolbar)
+        toolbar.addAction(self.about_action_toolbar)
         toolbar.addSeparator()
-        toolbar.addAction(self.exit_action)
+        toolbar.addAction(self.exit_action_toolbar)
 
     def open_adif(self):
         file, _ = QFileDialog.getOpenFileName(
@@ -112,3 +132,13 @@ class MainWindow(QMainWindow):
             self.i18n.t("about_title"),
             self.i18n.t("about_text")
         )
+
+    def reload_language(self, lang_code):
+        self.i18n = I18n(lang_code)
+        logging.debug(f"Reloaded language: {lang_code}")
+        self.status_bar.set_i18n(self.i18n)
+        self._create_actions()
+        self._create_menu()
+        self._create_toolbar()
+        self.map_preview.i18n = self.i18n
+        self.status_bar.showMessage(self.i18n.t("ready"))

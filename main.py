@@ -11,8 +11,8 @@ def main():
     lang = config.get("language", "en")
     i18n = I18n(lang)
 
-    # Set up logging (no console output)
-    setup_logger(debug=(config.get("log_level", "INFO") == "DEBUG"))
+    # Set up logging with config log level
+    setup_logger(log_level=config.get("log_level", "INFO"))
 
     app = QApplication(sys.argv)
     window = MainWindow(i18n)
