@@ -12,7 +12,7 @@ def setup_logger(log_level="INFO"):
     for handler in logger.handlers[:]:
         logger.removeHandler(handler)
     handler = RotatingFileHandler(
-        os.path.join(log_dir, "qsomapge.log"),
+        os.path.join(log_dir, "QSOMap2KML.log"),
         maxBytes=10 * 1024 * 1024,
         backupCount=10,
         encoding="utf-8"

@@ -1,6 +1,6 @@
-# QSOMapGE
+# QSOMap2KML
 
-QSOMapGE is a cross-platform application to visualize amateur radio QSOs from ADIF files on a map (Google Earth KML and interactive preview).  
+QSOMap2KML is a cross-platform application to visualize amateur radio QSOs from ADIF files on a map (Google Earth KML and interactive preview).  
 It features a modern PyQt6 GUI, dark mode, band/mode color configuration, internationalization (i18n), and more.
 
 ## Features
@@ -57,7 +57,7 @@ Log files are stored in the `logs/` directory with rotation.
 
 ## Screenshots
 
-Below are example screenshots of QSOMapGE:
+Below are example screenshots of QSOMap2KML:
 
 ![main Window](resources/screenshots/screenshot_main.jpg)
 *Application main window in dark mode.*

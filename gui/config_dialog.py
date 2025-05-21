@@ -11,7 +11,7 @@ MODES = ["SSB", "CW", "FT8", "FM", "AM"]
 
 class ConfigDialog(QDialog):
     """
-    Configuration dialog for QSOMapGE.
+    Configuration dialog for QSOMap2KML.
     Supports i18n and editing all config fields, including color pickers.
     """
     def __init__(self, parent=None, i18n=None):

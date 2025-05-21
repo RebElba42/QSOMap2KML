@@ -1,5 +1,5 @@
 """
-KML Export for QSOMapGE
+KML Export for QSOMap2KML
 -----------------------
 Exports QSOs as KML for Google Earth, with:
 - One placemark per QSO (with color by mode)

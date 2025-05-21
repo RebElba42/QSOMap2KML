@@ -14,7 +14,7 @@ from utils.kml_export import export_qsos_to_kml
 
 class MainWindow(QMainWindow):
     """
-    Main application window for QSOMapGE.
+    Main application window for QSOMap2KML.
     All UI texts are internationalized using the I18n module.
     """
     def __init__(self, i18n: I18n):
