@@ -61,4 +61,4 @@ See [LICENSE](LICENSE).
 
 ## Screenshots
 
-*(Add screenshots of the GUI and KML in Google Earth here if desired)*
+*Screenshot comming soon*
