@@ -145,7 +145,10 @@ logs/
 *.log
 
 # Config
-#config/settings.json
+config/settings.json
+share/xyzservices/providers.json
+pyvenv.cfg
+qso_example.adif
 
 # Resources (generated or user-specific)
 resources/icons/
