@@ -53,12 +53,33 @@ You can configure language, dark mode, your grid locator, band/mode colors, and 
 
 Log files are stored in the `logs/` directory with rotation.
 
-## License
-
-See [LICENSE](LICENSE).
-
 ---
 
 ## Screenshots
 
-*Screenshot comming soon*
+Below are example screenshots of QSOMapGE:
+
+![main Window](resources/screenshots/screenshot_main.jpg)
+*Application main window in dark mode.*
+
+![Map Preview](resources/screenshots/screenshot_preview.jpg)
+*Map preview with colored QSO markers, lines, and legend.*
+
+![Configuration Dialog](resources/screenshots/screenshot_config.jpg)
+*Configuration dialog for bands, modes, and user settings.*
+
+
+![KML Export View in Google Earth](resources/screenshots/screenshot_kml.jpg)
+*KML export visualized in Google Earth.*
+
+---
+
+## Contributions & Credits
+
+- Free icon pack used from [small-icons.com](http://www.small-icons.com/packs/32x32-free-design-icons.htm)
+
+---
+
+## License
+
+See [LICENSE](LICENSE).

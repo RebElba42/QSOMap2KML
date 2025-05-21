@@ -154,7 +154,7 @@ def export_qsos_to_kml(qsos, filename, my_locator=None, band_colors=None, mode_c
     for band, qsos_in_band in band_groups.items():
         kml.append(f'<Folder><name>{band}</name>')
         for qso in qsos_in_band:
-            call = qso.get('call', 'Unknown')
+            call = qso.get('call', 'Unknown').upper()
             grid = qso.get('gridsquare')
             mode = qso.get('mode', 'Unknown').upper()
             name = qso.get('name', '')
@@ -167,13 +167,18 @@ def export_qsos_to_kml(qsos, filename, my_locator=None, band_colors=None, mode_c
                 continue
             lat, lon = pos
             marker_style = f'marker_{mode}' if mode_colors and mode in mode_colors else ""
-            tooltip = (i18n.t("qso_tooltip") if i18n else
-                       "Call: {call}\nBand: {band}\nMode: {mode}\nName: {name}\nDate: {date}\nTime: {time}")
-            tooltip = tooltip.format(call=call, band=band, mode=mode, name=name, date=date, time=time)
+            if i18n and hasattr(i18n, "t"):
+                desc_template = i18n.t("kml_popup")
+                # Falls keine Übersetzung vorhanden ist, gibt t() meist den Key zurück
+                if desc_template == "kml_popup":
+                    desc_template = "Mode: {mode}<br>Band: {band}<br>Name: {name}<br>Date: {date}<br>Time: {time}"
+            else:
+                desc_template = "Mode: {mode}<br>Band: {band}<br>Name: {name}<br>Date: {date}<br>Time: {time}"
+            description = desc_template.format(mode=mode, band=band, name=name, date=date, time=time)
             kml.append(f"""
                 <Placemark>
                     <name>{call} ({mode})</name>
-                    <description><![CDATA[{tooltip.replace('\n', '<br/>')}]]></description>
+                    <description><![CDATA[{description}]]></description>
                     <styleUrl>#{marker_style}</styleUrl>
                     <Point>
                         <coordinates>{lon},{lat},0</coordinates>

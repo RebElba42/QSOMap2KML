@@ -30,7 +30,7 @@
   "export_kml_title": "KML-Export",
   "config_language": "Sprache",
   "config_dark_mode": "Dark Mode aktivieren",
-  "config_own_locator": "Eigener Locator (z.B. JO31ER)",
+  "config_own_locator": "Eigener Locator (z.B. FN31pr)",
   "config_own_name": "Dein Rufzeichen",
   "config_log_level": "Log-Level",
   "config_bands_colors": "Bandfarben (dict)",

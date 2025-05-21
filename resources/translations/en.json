@@ -30,7 +30,7 @@
   "export_kml_title": "KML Export",
   "config_language": "Language",
   "config_dark_mode": "Enable dark mode",
-  "config_own_locator": "Your grid locator (e.g. JO31ER)",
+  "config_own_locator": "Your grid locator (e.g. FN31pr)",
   "config_own_name": "Your Callsign",
   "config_log_level": "Log level",
   "config_bands_colors": "Band colors (dict)",
