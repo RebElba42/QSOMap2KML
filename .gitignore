@@ -148,7 +148,7 @@ logs/
 config/settings.json
 share/xyzservices/providers.json
 pyvenv.cfg
-qso_example.adif
+qso_examp*.adi*
 
 # Resources (generated or user-specific)
 resources/icons/

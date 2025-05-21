@@ -23,7 +23,7 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(900, 600)
         self.status_bar = StatusBar(self, self.i18n)
         self.setStatusBar(self.status_bar)
-        self.map_preview = MapPreview(self)
+        self.map_preview = MapPreview(self, self.i18n)
         self.setCentralWidget(self.map_preview)
         self.qsos = []
         self._create_actions()
