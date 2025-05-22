@@ -1,5 +1,5 @@
 #!/bin/bash
-# filepath: /Users/reb/Source/GitHub/QSOMapGE/build_mac.sh
+# filepath: /Users/reb/Source/GitHub/QSOMap2KML/build_mac.sh
 
 pyinstaller \
   --noconfirm \

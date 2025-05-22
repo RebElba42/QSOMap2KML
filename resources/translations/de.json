@@ -13,7 +13,7 @@
   "dialog_open_adif_filter": "ADIF-Dateien (*.adi *.adif)",
   "dialog_export_kml_title": "QSOs als KML exportieren",
   "about_title": "Über QSOMap2KML",
-  "about_text": "QSOMaQSOMap2KMLpGE\nVisualisiere deine QSOs in Google Earth.\n© 2025",
+  "about_text": "QSOMaQSOMap2KMLpGE\nVisualisiere deine QSOs in Google Earth.\n© 2025 by DB4REB",
   "config_title": "Konfiguration",
   "config_placeholder": "Hier erscheinen die Einstellungen (Sprache, Farben, Grid, Name, etc.)",
   "close": "Schließen",

@@ -18,7 +18,7 @@ def main():
 
     app = QApplication(sys.argv)
     app.setWindowIcon(QIcon(resource_path("resources/icons/Flow block.png")))
-    app.setApplicationName("QSOMapGE")
+    app.setApplicationName("QSOMap2KML © 2025 by DB4REB")
     window = MainWindow(i18n)
     window.show()
     sys.exit(app.exec())

@@ -22,7 +22,7 @@ class MainWindow(QMainWindow):
     def __init__(self, i18n: I18n):
         super().__init__()
         self.i18n = i18n
-        self.setWindowTitle("QSOMap2KML")
+        self.setWindowTitle("QSOMap2KML © 2025 by DB4REB")
         self.setMinimumSize(900, 600)
         self.status_bar = StatusBar(self, self.i18n)
         self.setStatusBar(self.status_bar)
