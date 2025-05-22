@@ -1,10 +1,11 @@
-from PyQt6.QtWebEngineWidgets import QWebEngineView
+from PySide6.QtWebEngineWidgets import QWebEngineView
 import folium
 import logging
 from folium.plugins import BeautifyIcon
 from folium import Element
 from utils.grid_locator import locator_to_latlon
 from utils.kml_export import format_adif_date, format_adif_time
+from utils.app_utils import call_progress
 from core.config_manager import ConfigManager
 
 class MapPreview(QWebEngineView):
@@ -28,7 +29,7 @@ class MapPreview(QWebEngineView):
         except Exception as e:
             logging.error(f"Error displaying empty map: {e}")
 
-    def show_qsos(self, qsos):
+    def show_qsos(self, qsos, progress_callback=None):
         try:
             config = ConfigManager.load()
             my_grid = config.get("my_grid", "")
@@ -52,8 +53,13 @@ class MapPreview(QWebEngineView):
                 ).add_to(m)
 
             marker_count = 0
+            total = len(qsos) 
+            done = 0
 
-            for qso in qsos:
+            for done, qso in enumerate(qsos):
+                # Fortschritt melden
+                call_progress(progress_callback, done, total)
+                done += 1
                 grid = qso.get('gridsquare')
                 call = qso.get('call', 'Unknown').upper()
                 band = qso.get('band', '')
@@ -99,6 +105,10 @@ class MapPreview(QWebEngineView):
                         )
                     ).add_to(m)
                     marker_count += 1
+
+            # Nach dem letzten QSO: Fortschritt auf 100%
+            if progress_callback:
+                progress_callback(len(qsos), len(qsos))
 
             if marker_count == 0:
                 folium.Marker(

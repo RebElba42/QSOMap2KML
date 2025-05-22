@@ -1,9 +1,13 @@
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QLabel, QPushButton, QLineEdit, QComboBox, QHBoxLayout, QColorDialog, QCheckBox, QFormLayout, QGroupBox
 )
-from PyQt6.QtGui import QColor
+from PySide6.QtGui import QColor
+from PySide6.QtWidgets import QApplication
 from core.config_manager import ConfigManager
 from utils.logger import set_log_level
+from utils.app_utils import get_app_stylesheet
+from functools import partial
+
 
 # Beispiel-Bänder und Modes (kannst du anpassen)
 BANDS = ["160m", "80m", "60m", "40m", "20m", "17m", "15m", "10m"]
@@ -52,7 +56,7 @@ class ConfigDialog(QDialog):
             color = band_colors.get(band, "#cccccc")
             btn = QPushButton()
             btn.setStyleSheet(f"background-color: {color}")
-            btn.clicked.connect(lambda _, b=band: self.pick_band_color(b))
+            btn.clicked.connect(partial(self.pick_band_color, band))
             self.band_color_buttons[band] = btn
             band_form.addRow(QLabel(band), btn)
         band_group.setLayout(band_form)
@@ -67,7 +71,7 @@ class ConfigDialog(QDialog):
             color = mode_colors.get(mode, "#cccccc")
             btn = QPushButton()
             btn.setStyleSheet(f"background-color: {color}")
-            btn.clicked.connect(lambda _, m=mode: self.pick_mode_color(m))
+            btn.clicked.connect(partial(self.pick_mode_color, mode))
             self.mode_color_buttons[mode] = btn
             mode_form.addRow(QLabel(mode), btn)
         mode_group.setLayout(mode_form)
@@ -114,4 +118,13 @@ class ConfigDialog(QDialog):
             self.parent().reload_language(self.config["language"]) 
         if hasattr(self.parent(), "qsos") and hasattr(self.parent(), "map_preview"):
             self.parent().map_preview.show_qsos(self.parent().qsos)
+        if self.parent():
+            app = QApplication.instance()
+            if app:
+                if self.config.get("dark_mode", True):
+                    app.setStyle("Fusion")
+                    app.setStyleSheet(get_app_stylesheet())
+                else:
+                    app.setStyle("WindowsVista")
+                    app.setStyleSheet("")
         self.accept()

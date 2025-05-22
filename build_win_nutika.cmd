@@ -3,7 +3,7 @@ REM set PATH=C:\upx;%PATH%
 nuitka ^
   --standalone ^
   --onefile ^
-  --enable-plugin=pyqt6 ^
+  --enable-plugin=PySide6 ^
   --windows-console-mode=disable ^
   --include-data-dir=resources=resources ^
   --include-data-dir=config=config ^

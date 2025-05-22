@@ -1,10 +1,10 @@
 import sys
-from PyQt6.QtWidgets import QApplication
-from PyQt6.QtGui import QIcon
+from PySide6.QtWidgets import QApplication
+from PySide6.QtGui import QIcon
 from gui.main_window import MainWindow
 from utils.logger import setup_logger
 from core.i18n import I18n
-from utils.app_utils import resource_path
+from utils.app_utils import resource_path, get_app_stylesheet
 from core.config_manager import ConfigManager
 
 def main():
@@ -19,6 +19,11 @@ def main():
     app = QApplication(sys.argv)
     app.setWindowIcon(QIcon(resource_path("resources/icons/Flow block.png")))
     app.setApplicationName("QSOMap2KML © 2025 by DB4REB")
+    # Darkmode setzen, wenn aktiviert
+
+    if config.get("dark_mode", True):
+        app.setStyle("Fusion")
+        app.setStyleSheet(get_app_stylesheet())    
     window = MainWindow(i18n)
     window.show()
     sys.exit(app.exec())

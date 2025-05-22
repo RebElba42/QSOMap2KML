@@ -1,10 +1,11 @@
 import os
 import logging
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QMainWindow, QFileDialog, QMessageBox, QToolBar
 )
-from PyQt6.QtGui import QAction, QIcon
-from PyQt6.QtCore import Qt
+from PySide6.QtGui import QAction, QIcon
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QApplication
 from gui.status_bar import StatusBar
 from gui.config_dialog import ConfigDialog
 from gui.map_preview import MapPreview
@@ -13,6 +14,7 @@ from core.config_manager import ConfigManager
 from core.i18n import I18n
 from utils.adif_parser import parse_adif
 from utils.kml_export import export_qsos_to_kml
+from utils.app_utils import get_app_stylesheet
 
 class MainWindow(QMainWindow):
     """
@@ -125,13 +127,22 @@ class MainWindow(QMainWindow):
             try:
                 qsos = parse_adif(file)
                 self.qsos = qsos
-                self.status_bar.showMessage(self.i18n.t("status_loaded_adif").format(count=len(qsos)))
+                
+                def progress(idx, total):
+                    self.status_bar.show_progress(idx, total)
+
+                self.map_preview.show_qsos(qsos, progress_callback=progress)
+                self.status_bar.hide_progress()
+                self.status_bar.showMessage(self.i18n.t("status_loaded_adif").format(count=len(qsos)))      
+                self.status_bar.showMessage(self.i18n.t("ready"))         
+  
                 self.map_preview.show_qsos(qsos)
                 logging.info(f"Loaded ADIF file: {file} ({len(qsos)} QSOs)")
                 # Enable export actions
                 self.export_kml_action_menu.setEnabled(True)
                 self.export_kml_action_toolbar.setEnabled(True)
             except Exception as e:
+                self.status_bar.hide_progress()
                 self.status_bar.showMessage(self.i18n.t("status_error_adif"))
                 logging.error(f"Error loading ADIF file: {file} - {e}")
                 QMessageBox.critical(self, "Error", str(e))
@@ -171,11 +182,16 @@ class MainWindow(QMainWindow):
             band_colors = config.get("bands_colors", {})
             mode_colors = config.get("modes_colors", {})
             lang = self.i18n.lang if hasattr(self.i18n, "lang") else "en"
+            def progress(idx, total):
+                self.status_bar.show_progress(idx, total)        
+                    
             export_qsos_to_kml(
                 self.qsos, file, my_locator, band_colors, mode_colors,
-                i18n=self.i18n, lang=lang
+                i18n=self.i18n, lang=lang, progress_callback=progress
             )
-
+            
+            self.status_bar.hide_progress() 
+            self.status_bar.showMessage(self.i18n.t("ready"))
             AutoCloseInfoBox(
                 self,
                 self.i18n.t("export_kml_title"),

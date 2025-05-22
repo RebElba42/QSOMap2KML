@@ -168,3 +168,8 @@ resources/icons/*
 # Ignore OS files
 .DS_Store
 Thumbs.db
+
+# Test KML und ADIF ADI
+QSO-Export*.kml
+*.adi
+*.Adif

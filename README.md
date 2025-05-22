@@ -1,7 +1,7 @@
 # QSOMap2KML
 
 QSOMap2KML is a cross-platform application to visualize amateur radio QSOs from ADIF files on a map (Google Earth KML and interactive preview).  
-It features a modern PyQt6 GUI, dark mode, band/mode color configuration, internationalization (i18n), and more.
+It features a modern PySide6 GUI, dark mode, band/mode color configuration, internationalization (i18n), and more.
 
 ## Features
 
@@ -45,7 +45,7 @@ You can configure language, dark mode, your grid locator, band/mode colors, and 
 ## Development
 
 - Python 3.9+
-- PyQt6 for GUI
+- PySide6 for GUI
 - Folium for map preview
 - KML export for Google Earth
 

@@ -12,6 +12,7 @@ Exports QSOs as KML for Google Earth, with:
 
 from utils.grid_locator import locator_to_latlon
 from datetime import datetime
+from utils.app_utils import call_progress
 
 def format_adif_date(date_str, lang="en"):
     """Format ADIF date YYYYMMDD to localized string."""
@@ -32,7 +33,7 @@ def format_adif_time(time_str):
         return f"{hour}:{minute}:{second}"
     return f"{hour}:{minute}"
 
-def export_qsos_to_kml(qsos, filename, my_locator=None, band_colors=None, mode_colors=None, i18n=None, lang="en"):
+def export_qsos_to_kml(qsos, filename, my_locator=None, band_colors=None, mode_colors=None, i18n=None, lang="en", progress_callback=None):
     """
     Export QSOs to a KML file for Google Earth.
 
@@ -151,6 +152,8 @@ def export_qsos_to_kml(qsos, filename, my_locator=None, band_colors=None, mode_c
         """)
 
     # Band folders with QSO markers
+    total = sum(len(qsos_in_band) for qsos_in_band in band_groups.values())
+    done = 0
     for band, qsos_in_band in band_groups.items():
         kml.append(f'<Folder><name>{band}</name>')
         for qso in qsos_in_band:
@@ -169,7 +172,6 @@ def export_qsos_to_kml(qsos, filename, my_locator=None, band_colors=None, mode_c
             marker_style = f'marker_{mode}' if mode_colors and mode in mode_colors else ""
             if i18n and hasattr(i18n, "t"):
                 desc_template = i18n.t("kml_popup")
-                # Falls keine Übersetzung vorhanden ist, gibt t() meist den Key zurück
                 if desc_template == "kml_popup":
                     desc_template = "Mode: {mode}<br>Band: {band}<br>Name: {name}<br>Date: {date}<br>Time: {time}"
             else:
@@ -185,6 +187,9 @@ def export_qsos_to_kml(qsos, filename, my_locator=None, band_colors=None, mode_c
                     </Point>
                 </Placemark>
             """)
+            # Fortschritt melden
+            call_progress(progress_callback, done, total)
+            done += 1
         kml.append('</Folder>')
 
     # Hidden folder for all lines
