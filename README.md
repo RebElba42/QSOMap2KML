@@ -59,18 +59,17 @@ Log files are stored in the `logs/` directory with rotation.
 
 Below are example screenshots of QSOMap2KML:
 
-![main Window](resources/screenshots/screenshot_main.jpg)
 *Application main window in dark mode.*
+![main Window](resources/screenshots/screenshot_main.jpg)
 
-![Map Preview](resources/screenshots/screenshot_preview.jpg)
 *Map preview with colored QSO markers, lines, and legend.*
+![Map Preview](resources/screenshots/screenshot_preview.jpg)
 
-![Configuration Dialog](resources/screenshots/screenshot_config.jpg)
 *Configuration dialog for bands, modes, and user settings.*
+![Configuration Dialog](resources/screenshots/screenshot_config.jpg)
 
-
-![KML Export View in Google Earth](resources/screenshots/screenshot_kml.jpg)
 *KML export visualized in Google Earth.*
+![KML Export View in Google Earth](resources/screenshots/screenshot_kml.jpg)
 
 ---
 
