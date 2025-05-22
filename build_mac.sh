@@ -4,6 +4,7 @@
 pyinstaller \
   --noconfirm \
   --windowed \
+  --onefile \ 
   --clean \
   --icon=resources/icons/Flow\ block.png \
   --name QSOMap2KML \

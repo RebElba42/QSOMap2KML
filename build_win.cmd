@@ -1,12 +1,2 @@
-pyinstaller ^
-  --noconfirm ^
-  --windowed ^
-  --clean ^
-  --icon=resources\icons\Flow block.png ^
-  --name QSOMap2KML ^
-  --add-data "resources;resources" ^
-  --add-data "config;config" ^
-  main.py
-
-echo Fertig! Das Binary liegt in dist\QSOMap2KML
-pause
+REM Build Windows Executable
+pyinstaller --noconfirm --windowed --onefile --clean --icon="resources\icons\Flow block.ico" --name QSOMap2KML --add-data "resources;resources" --add-data "config;config" --add-data "resources\xyzservices\data\providers.json;xyzservices\data" --add-data "resources\translations;resources\translations" main.py

@@ -1,5 +1,5 @@
 import json
-import os
+from utils.app_utils import resource_path  # Importiere die Hilfsfunktion
 
 class I18n:
     def __init__(self, lang="en"):
@@ -8,10 +8,12 @@ class I18n:
         self.load_translations()
 
     def load_translations(self):
-        path = f"resources/translations/{self.lang}.json"
-        if os.path.exists(path):
+        path = resource_path(f"resources/translations/{self.lang}.json")
+        try:
             with open(path, "r", encoding="utf-8") as f:
                 self.translations = json.load(f)
+        except FileNotFoundError:
+            self.translations = {}
 
     def t(self, key):
         return self.translations.get(key, key)
