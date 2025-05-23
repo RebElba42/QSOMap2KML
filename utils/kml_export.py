@@ -154,48 +154,49 @@ def export_qsos_to_kml(qsos, filename, my_locator=None, band_colors=None, mode_c
     # Band folders with QSO markers
     total = sum(len(qsos_in_band) for qsos_in_band in band_groups.values())
     done = 0
-    for band, qsos_in_band in band_groups.items():
-        kml.append(f'<Folder><name>{band}</name>')
-        for qso in qsos_in_band:
-            call = qso.get('call', 'Unknown').upper()
-            grid = qso.get('gridsquare')
-            mode = qso.get('mode', 'Unknown').upper()
-            name = qso.get('name', '')
-            date_raw = qso.get('date', '') or qso.get('qso_date', '')
-            time_raw = qso.get('time', '') or qso.get('time_on', '')
-            date = format_adif_date(date_raw, lang)
-            time = format_adif_time(time_raw)
-            pos = locator_to_latlon(grid) if grid else None
-            if not pos:
-                continue    # Skip if no position found
-            
-            lat, lon = pos
-            
-            if (my_lat, my_lon) == (lat, lon):
-                continue # Skip if QSO is at the same location as my_pos
+    if my_pos:
+        for band, qsos_in_band in band_groups.items():
+            kml.append(f'<Folder><name>{band}</name>')
+            for qso in qsos_in_band:
+                call = qso.get('call', 'Unknown').upper()
+                grid = qso.get('gridsquare')
+                mode = qso.get('mode', 'Unknown').upper()
+                name = qso.get('name', '')
+                date_raw = qso.get('date', '') or qso.get('qso_date', '')
+                time_raw = qso.get('time', '') or qso.get('time_on', '')
+                date = format_adif_date(date_raw, lang)
+                time = format_adif_time(time_raw)
+                pos = locator_to_latlon(grid) if grid else None
+                if not pos:
+                    continue    # Skip if no position found
+                
+                lat, lon = pos
+                
+                if (my_lat, my_lon) == (lat, lon):
+                    continue # Skip if QSO is at the same location as my_pos
 
-            marker_style = f'marker_{mode}' if mode_colors and mode in mode_colors else None
-            if i18n and hasattr(i18n, "t"):
-                desc_template = i18n.t("kml_popup")
-                if desc_template == "kml_popup":
+                marker_style = f'marker_{mode}' if mode_colors and mode in mode_colors else None
+                if i18n and hasattr(i18n, "t"):
+                    desc_template = i18n.t("kml_popup")
+                    if desc_template == "kml_popup":
+                        desc_template = "Mode: {mode}<br>Band: {band}<br>Name: {name}<br>Date: {date}<br>Time: {time}"
+                else:
                     desc_template = "Mode: {mode}<br>Band: {band}<br>Name: {name}<br>Date: {date}<br>Time: {time}"
-            else:
-                desc_template = "Mode: {mode}<br>Band: {band}<br>Name: {name}<br>Date: {date}<br>Time: {time}"
-            description = desc_template.format(mode=mode, band=band, name=name, date=date, time=time)
-            kml.append(f"""
-                <Placemark>
-                    <name>{call} ({mode})</name>
-                    <description><![CDATA[{description}]]></description>
-                    {f'<styleUrl>#{marker_style}</styleUrl>' if marker_style else ''}
-                    <Point>
-                        <coordinates>{lon},{lat},0</coordinates>
-                    </Point>
-                </Placemark>
-            """)
-            # Fortschritt melden
-            call_progress(progress_callback, done, total)
-            done += 1
-        kml.append('</Folder>')
+                description = desc_template.format(mode=mode, band=band, name=name, date=date, time=time)
+                kml.append(f"""
+                    <Placemark>
+                        <name>{call} ({mode})</name>
+                        <description><![CDATA[{description}]]></description>
+                        {f'<styleUrl>#{marker_style}</styleUrl>' if marker_style else ''}
+                        <Point>
+                            <coordinates>{lon},{lat},0</coordinates>
+                        </Point>
+                    </Placemark>
+                """)
+                # Fortschritt melden
+                call_progress(progress_callback, done, total)
+                done += 1
+            kml.append('</Folder>')
 
     # Hidden folder for all lines
     if my_pos:
