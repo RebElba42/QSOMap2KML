@@ -173,3 +173,5 @@ Thumbs.db
 QSO-Export*.kml
 *.adi
 *.Adif
+QSOMapGE.code-workspace
+nuitka-crash-report.xml

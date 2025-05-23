@@ -5,6 +5,7 @@ nuitka \
   --standalone \
   --onefile \
   --enable-plugin=pyside6 \
+  --macos-create-app-bundle \
   --include-data-file=resources/xyzservices/data/providers.json=resources/xyzservices/data/providers.json \
   --include-data-dir=resources/icons=resources/icons \
   --include-data-file=resources/translations/de.json=resources/translations/de.json \
