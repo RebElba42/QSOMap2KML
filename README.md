@@ -32,6 +32,34 @@ Start the application:
 python main.py
 ```
 
+## Binary Build (Nuitka)
+
+You can create a standalone executable (Windows, macOS, Linux) using [Nuitka](https://nuitka.net/):
+
+1. **Install Nuitka and a C compiler:**
+
+    ```bash
+    pip install nuitka
+    # On Windows: install a C compiler (e.g. MSVC or MinGW)
+    # On macOS: Xcode command line tools (xcode-select --install)
+    # On Linux: sudo apt install build-essential
+    ```
+
+2. **Build the executable:**
+
+    ```bash
+    nuitka --standalone --onefile --enable-plugin=pyside6 \
+      --include-data-dir=resources=resources \
+      --include-data-dir=config=config \
+      --output-filename=QSOMap2KML.exe \
+      main.py
+    ```
+
+    Adjust the paths and options for your system as needed.  
+    See `build_win_nutika.cmd` (Windows) or `build_mac_nuitka.sh` (macOS) for more examples.
+
+3. **The binary will be located in the `dist/` folder.**
+
 ## Configuration
 
 Settings are stored in `config/settings.json`.  
