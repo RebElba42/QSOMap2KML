@@ -2,16 +2,20 @@ import sys
 import os
 
 def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev, PyInstaller and Nuitka """
-    # Nuitka setzt sys.frozen == True, aber kein _MEIPASS!
-    if hasattr(sys, '_MEIPASS'):
-        return os.path.join(sys._MEIPASS, relative_path)
-    if getattr(sys, 'frozen', False):
-        # Nuitka: Ressourcen liegen im aktuellen Arbeitsverzeichnis
-        return os.path.join(os.path.dirname(sys.executable), relative_path)
-    return os.path.join(os.path.abspath("."), relative_path)
-  
-  
+    """Get absolute path to resource, works for dev, PyInstaller and Nuitka."""
+    # Nuitka-Onefile erkennt man an sys.nuitka_onefile
+    if getattr(sys, 'frozen', False) or getattr(sys, 'nuitka_onefile', False):
+        # Im gefrorenen Modus: immer vom Ordner der EXE (Temp-Ordner) aus!
+        base_path = os.path.dirname(sys.executable)
+        #print("Nuitka/PyInstaller-Modus, base_path:", base_path)
+    else:
+        # Im Entwicklermodus: vom Projekt-Hauptverzeichnis (eine Ebene über utils)
+        base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+        #print("Entwicklermodus, base_path:", base_path)
+    abs_path = os.path.join(base_path, relative_path)
+    #print("resource_path resolved:", abs_path)
+    return abs_path
+
 def get_app_stylesheet():
     """ Get Stylesheet for applications Darkmode """
     return """

@@ -1,2 +1,0 @@
-REM Build Windows Executable
-pyinstaller --noconfirm --windowed --onefile --clean --icon="resources\icons\Flow block.ico" --name QSOMap2KML --add-data "resources;resources" --add-data "config;config" --add-data "resources\xyzservices\data\providers.json;xyzservices\data" --add-data "resources\translations;resources\translations" main.py

@@ -127,18 +127,17 @@ class MainWindow(QMainWindow):
             try:
                 qsos = parse_adif(file)
                 self.qsos = qsos
-                
+
                 def progress(idx, total):
                     self.status_bar.show_progress(idx, total)
 
                 self.map_preview.show_qsos(qsos, progress_callback=progress)
                 self.status_bar.hide_progress()
-                self.status_bar.showMessage(self.i18n.t("status_loaded_adif").format(count=len(qsos)))      
-                self.status_bar.showMessage(self.i18n.t("ready"))         
-  
+                self.status_bar.showMessage(self.i18n.t("status_loading_map"))          
                 self.map_preview.show_qsos(qsos)
+                self.status_bar.showMessage(self.i18n.t("status_loaded_adif").format(count=len(qsos)))
+                #self.status_bar.showMessage(self.i18n.t("ready"))
                 logging.info(f"Loaded ADIF file: {file} ({len(qsos)} QSOs)")
-                # Enable export actions
                 self.export_kml_action_menu.setEnabled(True)
                 self.export_kml_action_toolbar.setEnabled(True)
             except Exception as e:

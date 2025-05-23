@@ -167,9 +167,14 @@ def export_qsos_to_kml(qsos, filename, my_locator=None, band_colors=None, mode_c
             time = format_adif_time(time_raw)
             pos = locator_to_latlon(grid) if grid else None
             if not pos:
-                continue
+                continue    # Skip if no position found
+            
             lat, lon = pos
-            marker_style = f'marker_{mode}' if mode_colors and mode in mode_colors else ""
+            
+            if (my_lat, my_lon) == (lat, lon):
+                continue # Skip if QSO is at the same location as my_pos
+
+            marker_style = f'marker_{mode}' if mode_colors and mode in mode_colors else None
             if i18n and hasattr(i18n, "t"):
                 desc_template = i18n.t("kml_popup")
                 if desc_template == "kml_popup":
@@ -181,7 +186,7 @@ def export_qsos_to_kml(qsos, filename, my_locator=None, band_colors=None, mode_c
                 <Placemark>
                     <name>{call} ({mode})</name>
                     <description><![CDATA[{description}]]></description>
-                    <styleUrl>#{marker_style}</styleUrl>
+                    {f'<styleUrl>#{marker_style}</styleUrl>' if marker_style else ''}
                     <Point>
                         <coordinates>{lon},{lat},0</coordinates>
                     </Point>
@@ -199,7 +204,7 @@ def export_qsos_to_kml(qsos, filename, my_locator=None, band_colors=None, mode_c
             for qso in qsos_in_band:
                 grid = qso.get('gridsquare')
                 pos = locator_to_latlon(grid) if grid else None
-                if not pos:
+                if not pos or not my_pos:
                     continue
                 lat, lon = pos
                 line_style = f'line_{band}' if band_colors and band in band_colors else None

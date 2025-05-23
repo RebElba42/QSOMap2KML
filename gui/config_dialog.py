@@ -10,8 +10,8 @@ from functools import partial
 
 
 # Beispiel-Bänder und Modes (kannst du anpassen)
-BANDS = ["160m", "80m", "60m", "40m", "20m", "17m", "15m", "10m"]
-MODES = ["SSB", "CW", "FT8", "FM", "AM"]
+BANDS = []
+MODES = []
 
 class ConfigDialog(QDialog):
     # ...existing code...
@@ -21,6 +21,12 @@ class ConfigDialog(QDialog):
         self.setWindowTitle(self.i18n.t("config_title") if self.i18n else "Configuration")
         self.setMinimumWidth(400)
         self.config = ConfigManager.load()
+        
+        #Load Bands and mode from settings.json
+        band_colors = self.config.get("bands_colors", {})
+        mode_colors = self.config.get("modes_colors", {})
+        BANDS = list(band_colors.keys())
+        MODES = list(mode_colors.keys())
 
         layout = QVBoxLayout()
 
@@ -51,7 +57,6 @@ class ConfigDialog(QDialog):
         band_group = QGroupBox(self.i18n.t("config_group_band_colors") if self.i18n else "Band Colors")
         band_form = QFormLayout()
         self.band_color_buttons = {}
-        band_colors = self.config.get("bands_colors", {})
         for band in BANDS:
             color = band_colors.get(band, "#cccccc")
             btn = QPushButton()
@@ -60,13 +65,11 @@ class ConfigDialog(QDialog):
             self.band_color_buttons[band] = btn
             band_form.addRow(QLabel(band), btn)
         band_group.setLayout(band_form)
-        layout.addWidget(band_group)
 
         # --- Mode Colors Group ---
         mode_group = QGroupBox(self.i18n.t("config_group_mode_colors") if self.i18n else "Mode Colors")
         mode_form = QFormLayout()
         self.mode_color_buttons = {}
-        mode_colors = self.config.get("modes_colors", {})
         for mode in MODES:
             color = mode_colors.get(mode, "#cccccc")
             btn = QPushButton()
@@ -75,7 +78,12 @@ class ConfigDialog(QDialog):
             self.mode_color_buttons[mode] = btn
             mode_form.addRow(QLabel(mode), btn)
         mode_group.setLayout(mode_form)
-        layout.addWidget(mode_group)
+
+        # --- Farbgruppen nebeneinander ---
+        color_layout = QHBoxLayout()
+        color_layout.addWidget(band_group)
+        color_layout.addWidget(mode_group)
+        layout.addLayout(color_layout)
 
         # --- Buttons ---
         btn_layout = QHBoxLayout()

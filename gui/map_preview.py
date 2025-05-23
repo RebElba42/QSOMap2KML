@@ -138,6 +138,7 @@ class MapPreview(QWebEngineView):
             </div>
             """         
             m.get_root().html.add_child(Element(legend_html))  
+            
             html = m.get_root().render()
             self.setHtml(html)
         except Exception as e:

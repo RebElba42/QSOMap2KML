@@ -27,6 +27,7 @@
   "status_loaded_adif": "{count} QSOs loaded.",
   "status_error_adif": "Error loading ADIF file.",
   "status_kml_exported": "KML file exported successfully.",
+  "status_loading_map": "Loading map...",
   "export_kml_title": "KML Export",
   "config_language": "Language",
   "config_dark_mode": "Enable dark mode",

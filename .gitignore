@@ -155,7 +155,7 @@ QSO-Export.kml
 # Resources (generated or user-specific)
 resources/icons/*
 !resources/icons/Flow block.png
-!resources/icons/Flow block.ico
+!resources/icons/flow_block.ico
 !resources/icons/Upload image.png
 !resources/icons/Close.png
 !resources/icons/Export.png
