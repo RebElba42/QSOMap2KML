@@ -133,10 +133,7 @@ class MainWindow(QMainWindow):
 
                 self.map_preview.show_qsos(qsos, progress_callback=progress)
                 self.status_bar.hide_progress()
-                self.status_bar.showMessage(self.i18n.t("status_loading_map"))          
-                self.map_preview.show_qsos(qsos)
                 self.status_bar.showMessage(self.i18n.t("status_loaded_adif").format(count=len(qsos)))
-                #self.status_bar.showMessage(self.i18n.t("ready"))
                 logging.info(f"Loaded ADIF file: {file} ({len(qsos)} QSOs)")
                 self.export_kml_action_menu.setEnabled(True)
                 self.export_kml_action_toolbar.setEnabled(True)
